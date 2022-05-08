@@ -12,7 +12,6 @@ namespace PyroFlight
     public class Main : MelonMod
     {
         public static PyroModule module;
-        public static PyroLogs.Instance logger;
         public static QMCategory menu;
 
         public override void OnApplicationStart()
@@ -22,7 +21,7 @@ namespace PyroFlight
             var subMenu = module.CreateMenu(menu, "Menu Test", "Menu test lol", "Menu Test");
             module.CreateButton(subMenu, 1, 0, "UwU", delegate
             {
-                logger.Log("UwU Clicked!");
+                module.Logger.Log("UwU Clicked!");
             }, "Write uwu to the console!");
         }
     }

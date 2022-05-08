@@ -64,7 +64,8 @@ namespace PyroMod
                 ModuleName = moduleName,
                 ModuleAuthor = moduleAuthor,
                 ModuleDownloadURL = moduleDownloadUrl,
-                ModuleVersion = moduleVersion
+                ModuleVersion = moduleVersion,
+                Logger = new PyroLogs.Instance(moduleName),
             };
             PyroModules.Add(tmp);
             PyroLogs.Log($"Loaded Module {moduleName} v{moduleVersion} by {moduleAuthor}{(!string.IsNullOrEmpty(moduleDownloadUrl) ? $" (Download Link: {moduleDownloadUrl})" : string.Empty)}", ConsoleColor.Green);
@@ -82,6 +83,7 @@ namespace PyroMod
             internal List<QMSingleButton> ModuleSingleButtons { get; set; } = new List<QMSingleButton>();
             internal List<QMToggleButton> ModuleToggleButtons { get; set; } = new List<QMToggleButton>();
             internal List<QMSlider> ModuleSliders { get; set; } = new List<QMSlider>();
+            public PyroLogs.Instance Logger { get; set; }
 
             internal void InitializeModuleUI()
             {
