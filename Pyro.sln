@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyroMod", "PyroCore\PyroMod.csproj", "{4197DA3A-B2CE-4348-8CD3-03AA36305F80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PyroFlight", "PyroFlight\PyroFlight.csproj", "{CC6E593A-DAC1-43E8-BC33-81CC0EC4B268}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4197DA3A-B2CE-4348-8CD3-03AA36305F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4197DA3A-B2CE-4348-8CD3-03AA36305F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4197DA3A-B2CE-4348-8CD3-03AA36305F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4197DA3A-B2CE-4348-8CD3-03AA36305F80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC6E593A-DAC1-43E8-BC33-81CC0EC4B268}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC6E593A-DAC1-43E8-BC33-81CC0EC4B268}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC6E593A-DAC1-43E8-BC33-81CC0EC4B268}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC6E593A-DAC1-43E8-BC33-81CC0EC4B268}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7B9BA837-8C11-4E50-AB65-1F543CE9D9EE}
+	EndGlobalSection
+EndGlobal
