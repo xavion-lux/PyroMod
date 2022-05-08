@@ -12,6 +12,8 @@ This mod makes it easier to create VRChat mods without having to stress about ha
 If you need assistance getting started with PyroMod feel free to join my discord to receive support from either me or others in the community!
 https://discord.gg/BlazesClient
 
+If you find a bug or want to suggest a feature to be added to PyroMod you can open an issue and let us know OR fork the repo and make those changes yourself and make a pull request!
+
 ```cs
 [assembly: MelonInfo(typeof(PyroFlight.Main), "PyroFlight", "1.0.0", "WTFBlaze")]
 [assembly: MelonGame("VRChat", "VRChat")]
