@@ -4,15 +4,17 @@ Your new favorite VRChat Mod Core!
 ## Purpose
 This mod makes it easier to create VRChat mods without having to stress about having all the appropriate materials. This mod is meant to be super user friendly and help make it easier for new mod developers get started making their own mods!
 
-## How To Use
-
-- Add PyroMod as a reference to your project
-
 # Read Me
 If you need assistance getting started with PyroMod feel free to join my discord to receive support from either me or others in the community!
 https://discord.gg/BlazesClient
 
 If you find a bug or want to suggest a feature to be added to PyroMod you can open an issue and let us know OR fork the repo and make those changes yourself and make a pull request!
+
+## How To Use
+
+- Add PyroMod as a reference to your project
+
+PyroFlight is an example project of how to use PyroMod along with the code snippet below
 
 ```cs
 [assembly: MelonInfo(typeof(PyroFlight.Main), "PyroFlight", "1.0.0", "WTFBlaze")]
