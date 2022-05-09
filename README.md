@@ -50,3 +50,8 @@ namespace PyroFlight
 | CreateButton | Creates a single action button | QMSingleButton |
 | CreateToggle | Creates a double action button toggle button | QMToggleButton |
 | CreateSlider | Creates a slider inside your desired menu / category | QMSlider
+
+## Planned Features
+- Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc
+- Easier Harmony Patching
+- Wings Button API
