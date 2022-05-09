@@ -12,6 +12,7 @@ If you find a bug or want to suggest a feature to be added to PyroMod you can op
 
 ## How To Use
 
+- Follow the basic project example from [MelonLoader's Official Wiki](https://melonwiki.xyz/#/modders/quickstart?id=basic-mod-setup)
 - Add PyroMod as a reference to your project
 
 PyroFlight is an example project of how to use PyroMod along with the code snippet below
