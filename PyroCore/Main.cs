@@ -1,9 +1,13 @@
 ﻿using MelonLoader;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PyroMod;
 using PyroMod.API.QuickMenu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using UnityEngine.Networking;
 
 [assembly: MelonInfo(typeof(PyroMod.Main), PyroBuildInfo.Name, PyroBuildInfo.Version, PyroBuildInfo.Author, PyroBuildInfo.RepoUrl)]
 [assembly: MelonGame(PyroBuildInfo.GameAndDeveloper, PyroBuildInfo.GameAndDeveloper)]
@@ -14,7 +18,7 @@ namespace PyroMod
     public class PyroBuildInfo
     {
         public const string Name = "PyroMod";
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
         public const string Author = "WTFBlaze";
         public const string RepoUrl = "https://github.com/WTFBlaze/PyroMod";
         public const string GameAndDeveloper = "VRChat";
@@ -29,6 +33,22 @@ namespace PyroMod
 
         public override void OnApplicationStart()
         {
+            using (WebClient webClient = new WebClient())
+            {
+                var data = webClient.DownloadString("https://cdn.wtfblaze.com/mods/Mods.json");
+                var result = JsonConvert.DeserializeObject<JToken>(data);
+
+                foreach (var item in result)
+                {
+                    if ((string)item["Name"] == "PyroMod")
+                    {
+                        if ((string)item["Version"] == PyroBuildInfo.Version)
+                            PyroLogs.Success("PyroMod is up to date!");
+                        else
+                            PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["tag_name"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
+                    }
+                }
+            }
             MelonCoroutines.Start(WaitForQM());
         }
 
@@ -149,12 +169,6 @@ namespace PyroMod
             }
 
             #region Create UI Methods
-
-            public PyroLogs.Instance CreateLogger(string loggerTitle)
-            {
-                var tmp = new PyroLogs.Instance(loggerTitle.Replace(' ', '-'));
-                return tmp;
-            }
 
             public QMCategory CreateCategory(string categoryLabel)
             {
