@@ -23,7 +23,6 @@ namespace PyroMod.API.QuickMenu
             DefaultState = defaultState;
             Module = module;
             LabelTxt = labelTxt;
-            Module.ModuleCategories.Add(this);
         }
 
         internal void Initialize()

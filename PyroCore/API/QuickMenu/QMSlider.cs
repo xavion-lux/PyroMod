@@ -70,7 +70,8 @@ namespace PyroMod.API.QuickMenu
             sliderComp.onValueChanged.AddListener(SliderAction);
             sliderComp.onValueChanged.AddListener(new Action<float>(delegate (float f)
             {
-                slider.transform.Find("Fill Area/Label").GetComponent<Text>().text = $"{sliderComp.value}/{MaxValue}";
+                CurrentValue = Convert.ToSingle(Mathf.Round(f * 100) / 100.0);
+                slider.transform.Find("Fill Area/Label").GetComponent<Text>().text = $"{CurrentValue}/{MaxValue}";
             }));
 
             text = label.GetComponent<Text>();
