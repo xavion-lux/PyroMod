@@ -1,7 +1,4 @@
 # PyroMod
-Your new favorite VRChat Mod Core!
-
-## Purpose
 This mod makes it easier to create VRChat mods without having to stress about having all the appropriate materials. This mod is meant to be super user friendly and help make it easier for new mod developers get started making their own mods!
 
 # Read Me
@@ -10,39 +7,20 @@ https://discord.gg/BlazesClient
 
 If you find a bug or want to suggest a feature to be added to PyroMod you can open an issue and let us know OR fork the repo and make those changes yourself and make a pull request!
 
+To find a list of all available PyroModules join the discord linked above.
+
 ## How To Use
 
 - Follow the basic project example from [MelonLoader's Official Wiki](https://melonwiki.xyz/#/modders/quickstart?id=basic-mod-setup)
 - Add PyroMod as a reference to your project
 
-PyroFlight is an example project of how to use PyroMod along with the code snippet below
-
+Inside your Module's OnApplicationStart Method Register your Module with PyroMod
 ```cs
-[assembly: MelonInfo(typeof(PyroFlight.Main), "PyroFlight", "1.0.0", "WTFBlaze")]
-[assembly: MelonGame("VRChat", "VRChat")]
-[assembly: MelonAdditionalDependencies("PyroMod")] // This is important to tell MelonLoader that PyroMod is an ABSOLUTELY MUST HAVE for your mod to run
-
-namespace PyroFlight
-{
-    public class Main : MelonMod
-    {
-        public static PyroModule module;
-        public static PyroLogs.Instance logger;
-        public static QMCategory menu;
-
-        public override void OnApplicationStart()
-        {
-            module = RegisterModule("Pyro Flight", "1.0.0", "WTFBlaze", "https://github.com/WTFBlaze/PyroFlight");
-            menu = module.CreateCategory("Pyro Flight");
-            var subMenu = module.CreateMenu(menu, "Menu Test", "Menu test lol", "Menu Test");
-            module.CreateButton(subMenu, 1, 0, "UwU", delegate
-            {
-                logger.Log("UwU Clicked!");
-            }, "Write uwu to the console!");
-        }
-    }
-}
+// [] optional parameters
+var Module = PyroMod.Main.RegisterModule(ModuleName, ModuleVersion, ModuleAuthor, [ModuleColor], [ModuleDownloadURL]);
 ```
+
+There is an example project attached to the repo
 
 ## Functions
 | Method  | Description | Return Type |
@@ -52,10 +30,12 @@ namespace PyroFlight
 | CreateMenu | Creates a custom menu for your module | QMNestedMenu |
 | CreateButton | Creates a single action button | QMSingleButton |
 | CreateToggle | Creates a double action button toggle button | QMToggleButton |
-| CreateSlider | Creates a slider inside your desired menu / category | QMSlider
+| CreateSlider | Creates a slider inside your desired menu / category | QMSlider |
+| AddHook_PlayerJoined | Calls your provided method whenever a player joins the room | N/A |
+| AddHook_PlayerLeft | Calls your provided method whenever a player leaves the room | N/A |
 
 ## Planned Features
-- Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc
+- ~~Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc~~ *[Completed]*
 - Easier Harmony Patching
 - Wings Button API
 ---
