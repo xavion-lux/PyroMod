@@ -1,37 +1,113 @@
 ﻿using MelonLoader;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PyroMod
 {
     public class PyroLogs
     {
         internal static MelonLogger.Instance logger = new MelonLogger.Instance("PyroMod", ConsoleColor.Red);
+        internal static string CurrentLogFile;
 
-        internal static void Log(string msg) => ProcessLog(msg, ConsoleColor.Gray);
-        internal static void Log(string msg, ConsoleColor col) => ProcessLog(msg, col);
-        internal static void Warning(string msg) => ProcessLog("[Warning] " + msg, ConsoleColor.Gray);
-        internal static void Warning(string msg, ConsoleColor col) => ProcessLog("[Warning] " + msg, col);
-        internal static void Error(string msg) => ProcessLog("[Error] " + msg, ConsoleColor.Gray);
-        internal static void Error(string msg, ConsoleColor col) => ProcessLog("[Error] " + msg, col);
-        internal static void Success(string msg) => ProcessLog("[Success] " + msg, ConsoleColor.Green);
-        internal static void Failure(string msg) => ProcessLog("[Failure] " + msg, ConsoleColor.Red);
+        internal static void Log(string msg) => ProcessLog(LogLevel.Log, msg, ConsoleColor.Gray);
+        internal static void Log(string msg, ConsoleColor col) => ProcessLog(LogLevel.Log, msg, col);
+        internal static void Warning(string msg) => ProcessLog(LogLevel.Warning, msg, ConsoleColor.Gray);
+        internal static void Warning(string msg, ConsoleColor col) => ProcessLog(LogLevel.Warning, msg, col);
+        internal static void Error(string msg) => ProcessLog(LogLevel.Error, msg, ConsoleColor.Gray);
+        internal static void Error(string msg, ConsoleColor col) => ProcessLog(LogLevel.Error, msg, col);
+        internal static void Success(string msg) => ProcessLog(LogLevel.Success, msg, ConsoleColor.Green);
+        internal static void Failure(string msg) => ProcessLog(LogLevel.Failure, msg, ConsoleColor.Red);
 
-        private static void ProcessLog(string msg, ConsoleColor col)
+        internal static void Initialize()
         {
-            logger.Msg(col, msg);
+            var directoryInfo = new DirectoryInfo("UserData\\PyroMod\\Logs");
+            if (directoryInfo.GetFiles().Length == 5)
+            {
+                File.Delete(directoryInfo.GetFiles()
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .Last().FullName);
+            }
+            var rnd = new System.Random().Next(1000, 9999);
+            var file = File.Create($"UserData\\PyroMod\\Logs\\PyroLogs-{rnd}.log");
+            file.Close();
+            CurrentLogFile = file.Name;
+        }
+
+        internal static void ProcessLog(LogLevel lvl, string msg, ConsoleColor col, Instance instance = null)
+        {
+            string fullLog = string.Empty;
+            var time = DateTime.Now.ToString("HH:mm:fffff");
+            time = time.Insert(8, ".");
+            fullLog += $"[{time}] [PyroMod] ";
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("[");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(time);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("] [");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("PyroMod");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("]");
+            if (instance != null)
+            {
+                fullLog += $" [{instance.ModuleName}] ";
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("[");
+                Console.ForegroundColor = instance.ModuleColor;
+                Console.Write(instance.ModuleName);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("] ");
+            }
+            fullLog += $"[{lvl}] ";
+            Console.Write(" [");
+            Console.ForegroundColor = LogLevelToColor(lvl);
+            Console.Write(lvl);
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("] ");
+            Console.ForegroundColor = ConsoleColor.Gray;
+            fullLog += msg;
+            Console.WriteLine(msg);
+            Console.ResetColor();
+            File.AppendAllText(CurrentLogFile, fullLog + "\n");
+        }
+
+        private static ConsoleColor LogLevelToColor(LogLevel lvl)
+        {
+            switch (lvl)
+            {
+                case LogLevel.Warning:
+                    return ConsoleColor.Yellow;
+
+                case LogLevel.Error:
+                    return ConsoleColor.Red;
+
+                case LogLevel.Success:
+                    return ConsoleColor.Green;
+
+                case LogLevel.Failure:
+                    return ConsoleColor.Red;
+
+                default:
+                    return ConsoleColor.DarkGray;
+            }
         }
 
         public class Instance
         {
-            public string ModuleName { get; private set; }
-            public Instance(string moduleName)
+            public Instance(string moduleName, ConsoleColor col)
             {
-                ModuleName = moduleName;
+                ModuleName = moduleName.Replace(' ', '-');
+                ModuleColor = col;
             }
+
+            public string ModuleName { get; }
+            public ConsoleColor ModuleColor { get; } = ConsoleColor.DarkGray;
 
             public void Log(string msg) => ProcessLog(LogLevel.Log, msg, ConsoleColor.Gray);
             public void Log(string msg, ConsoleColor col) => ProcessLog(LogLevel.Log, msg, col);
@@ -41,11 +117,6 @@ namespace PyroMod
             public void Error(string msg, ConsoleColor col) => ProcessLog(LogLevel.Error, msg, col);
             public void Success(string msg) => ProcessLog(LogLevel.Success, msg, ConsoleColor.Green);
             public void Failure(string msg) => ProcessLog(LogLevel.Failure, msg, ConsoleColor.Red);
-
-            private void ProcessLog(LogLevel logLvl, string msg, ConsoleColor col)
-            {
-                logger.Msg(col, $"[{logLvl} {msg}");
-            }
         }
 
         internal enum LogLevel

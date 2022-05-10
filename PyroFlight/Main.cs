@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using PyroMod;
 using PyroMod.API.QuickMenu;
 using static PyroMod.Main;
 

@@ -160,6 +160,7 @@
     <Compile Include="API\QuickMenu\QMSlider.cs" />
     <Compile Include="API\QuickMenu\QMTabMenu.cs" />
     <Compile Include="API\QuickMenu\QMToggleButton.cs" />
+    <Compile Include="Hooks.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PyroLogs.cs" />

@@ -6,7 +6,10 @@ using PyroMod.API.QuickMenu;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEngine.Networking;
 
 [assembly: MelonInfo(typeof(PyroMod.Main), PyroBuildInfo.Name, PyroBuildInfo.Version, PyroBuildInfo.Author, PyroBuildInfo.RepoUrl)]
@@ -33,6 +36,15 @@ namespace PyroMod
 
         public override void OnApplicationStart()
         {
+            if (!Directory.Exists("UserData\\PyroMod"))
+            {
+                Directory.CreateDirectory("UserData\\PyroMod");
+            }
+            if (!Directory.Exists("UserData\\PyroMod\\Logs"))
+            {
+                Directory.CreateDirectory("UserData\\PyroMod\\Logs");
+            }
+            PyroLogs.Initialize();
             using (WebClient webClient = new WebClient())
             {
                 var data = webClient.DownloadString("https://cdn.wtfblaze.com/mods/Mods.json");
@@ -43,13 +55,14 @@ namespace PyroMod
                     if ((string)item["Name"] == "PyroMod")
                     {
                         if ((string)item["Version"] == PyroBuildInfo.Version)
-                            PyroLogs.Success("PyroMod is up to date!");
+                            PyroLogs.Log("PyroMod is up to date!");
                         else
                             PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["tag_name"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
                     }
                 }
             }
             MelonCoroutines.Start(WaitForQM());
+            Hooks.Initialize();
         }
 
         private IEnumerator WaitForQM()
@@ -70,7 +83,7 @@ namespace PyroMod
             _qmIsInitialized = true;
         } 
 
-        public static PyroModule RegisterModule(string moduleName, string moduleVersion, string moduleAuthor, string moduleDownloadUrl = null)
+        public static PyroModule RegisterModule(string moduleName, string moduleVersion, string moduleAuthor, ConsoleColor? moduleColor = ConsoleColor.DarkGray, string moduleDownloadUrl = null)
         {
             // Check for duplicate named Modules because I am evil and nobody can name identically named modules lol
             if (PyroModules.Exists(x => x.ModuleName.ToLower() == moduleName.ToLower()))
@@ -85,7 +98,7 @@ namespace PyroMod
                 ModuleAuthor = moduleAuthor,
                 ModuleDownloadURL = moduleDownloadUrl,
                 ModuleVersion = moduleVersion,
-                Logger = new PyroLogs.Instance(moduleName),
+                Logger = new PyroLogs.Instance(moduleName, (ConsoleColor)moduleColor),
             };
             PyroModules.Add(tmp);
             PyroLogs.Log($"Loaded Module {moduleName} v{moduleVersion} by {moduleAuthor}{(!string.IsNullOrEmpty(moduleDownloadUrl) ? $" (Download Link: {moduleDownloadUrl})" : string.Empty)}", ConsoleColor.Green);
@@ -231,6 +244,107 @@ namespace PyroMod
                 var tmp = new QMSlider(menu, posX, posY, labelTxt, minValue, maxValue, currentValue, onSliderChanged);
                 if (_qmIsInitialized) tmp.Initialize();
                 return tmp;
+            }
+
+            #endregion
+
+            #region Hook Methods
+
+            public void AddHook_PlayerJoined(string methodName)
+            {
+                var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+                MethodInfo method = callingClass.GetMethod(methodName);
+                if (method == null)
+                {
+                    Logger.Error("Failed to Hook PlayerJoined! | Error Message: method is null!");
+                    return;
+                }
+                var methodParams = method.GetParameters();
+                if (methodParams.Length != 1)
+                {
+                    if (methodParams.Length < 1)
+                        Logger.Error("Failed to Hook PlayerJoined! | Error Message: too many parameters!");
+                    else
+                        Logger.Error("Failed to Hook PlayerJoined! | Error Message: method missing parameters!");
+                    return;
+                }
+                if (methodParams[0].ParameterType != typeof(VRC.Player))
+                {
+                    Logger.Error("Failed to Hook PlayerJoined! | Error Message: first parameter is not vrc.player!");
+                    return;
+                }
+                Hooks.OnPlayerJoined += new Action<VRC.Player>(player =>
+                {
+                    method.Invoke(null, new object[] { player });
+                });
+            }
+
+            public void AddHook_PlayerLeft(string methodName)
+            {
+                var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+                MethodInfo method = callingClass.GetMethod(methodName);
+                if (method == null)
+                {
+                    Logger.Error("Failed to Hook PlayerLeft! | Error Message: method is null!");
+                    return;
+                }
+                var methodParams = method.GetParameters();
+                if (methodParams.Length != 1)
+                {
+                    if (methodParams.Length < 1)
+                        Logger.Error("Failed to Hook PlayerLeft! | Error Message: too many parameters!");
+                    else
+                        Logger.Error("Failed to Hook PlayerLeft! | Error Message: method missing parameters!");
+                    return;
+                }
+                if (methodParams[0].ParameterType != typeof(VRC.Player))
+                {
+                    Logger.Error("Failed to Hook PlayerLeft! | Error Message: first parameter is not vrc.player!");
+                    return;
+                }
+                Hooks.OnPlayerLeft += new Action<VRC.Player>(player =>
+                {
+                    method.Invoke(null, new object[] { player });
+                });
+            }
+
+            public void AddHook_RPCReceived(string methodName)
+            {
+                var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+                MethodInfo method = callingClass.GetMethod(methodName);
+                if (method == null)
+                {
+                    Logger.Error("Failed to Hook RPCReceived! | Error Message: method is null!");
+                    return;
+                }
+                var methodParams = method.GetParameters();
+                if (methodParams.Length != 3)
+                {
+                    if (methodParams.Length < 3)
+                        Logger.Error("Failed to Hook RPCReceived! | Error Message: too many parameters!");
+                    else
+                        Logger.Error("Failed to Hook RPCReceived! | Error Message: method missing parameters!");
+                    return;
+                }
+                if (methodParams[0].ParameterType != typeof(VRC.Player))
+                {
+                    Logger.Error("Failed to Hook RPCReceived! | Error Message: first parameter is not vrc.player!");
+                    return;
+                }
+                if (methodParams[1].ParameterType != typeof(VRC.SDKBase.VRC_EventHandler.VrcEvent))
+                {
+                    Logger.Error("Failed to Hook RPCReceived! | Error Message: second parameter is not vrc.sdkbase.vrc_eventhandler.vrcevent!");
+                    return;
+                }
+                if (methodParams[2].ParameterType != typeof(VRC.SDKBase.VRC_EventHandler.VrcBroadcastType))
+                {
+                    Logger.Error("Failed to Hook RPCReceived! | Error Message: third parameter is not vrc.sdkbase.vrc_eventhandler.vrcbroadcasttype!");
+                    return;
+                }
+                Hooks.OnRPCReceived += new Action<VRC.Player, VRC.SDKBase.VRC_EventHandler.VrcEvent, VRC.SDKBase.VRC_EventHandler.VrcBroadcastType>((player, eventInfo, broadcastType) =>
+                {
+                    method.Invoke(null, new object[] { player, eventInfo, broadcastType });
+                });
             }
 
             #endregion
