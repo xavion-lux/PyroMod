@@ -58,3 +58,6 @@ namespace PyroFlight
 - Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc
 - Easier Harmony Patching
 - Wings Button API
+---
+#### Disclaimer: Modification of the VRChat client goes against VRChat's <a href="https://hello.vrchat.com/legal">ToS</a> and could result in your account being banned. Use mods at your own risks.
+#### This mod is meant to be used to better VRChat's modding community and to be a helpful learning tool for up and coming developers who need that boost to get start.
