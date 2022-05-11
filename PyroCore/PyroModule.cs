@@ -194,7 +194,7 @@ namespace PyroMod
                 Logger.Error("Failed to Hook PlayerJoined! | Error Message: first parameter is not vrc.player!");
                 return;
             }
-            Hooks.OnPlayerJoined += new Action<Player>(player =>
+            OnPlayerJoined += new Action<Player>(player =>
             {
                 method.Invoke(null, new object[] { player });
             });
@@ -228,7 +228,7 @@ namespace PyroMod
                 Logger.Error("Failed to Hook PlayerLeft! | Error Message: first parameter is not vrc.player!");
                 return;
             }
-            Hooks.OnPlayerLeft += new Action<Player>(player =>
+            OnPlayerLeft += new Action<Player>(player =>
             {
                 method.Invoke(null, new object[] { player });
             });
@@ -272,7 +272,7 @@ namespace PyroMod
                 Logger.Error("Failed to Hook RPCReceived! | Error Message: third parameter is not vrc.sdkbase.vrc_eventhandler.vrcbroadcasttype!");
                 return;
             }
-            Hooks.OnRPCReceived += new Action<Player, VRC_EventHandler.VrcEvent, VRC_EventHandler.VrcBroadcastType>((player, eventInfo, broadcastType) =>
+            OnRPCReceived += new Action<Player, VRC_EventHandler.VrcEvent, VRC_EventHandler.VrcBroadcastType>((player, eventInfo, broadcastType) =>
             {
                 method.Invoke(null, new object[] { player, eventInfo, broadcastType });
             });
@@ -298,7 +298,7 @@ namespace PyroMod
                 Logger.Error("Failed to Hook QMInitialized! | Error Message: too many parameters!");
                 return;
             }
-            Hooks.OnQMInitialized += new Action(() =>
+            OnQMInitialized += new Action(() =>
             {
                 method.Invoke(null, null);
             });
@@ -332,11 +332,38 @@ namespace PyroMod
                 Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: first parameter is not vrcplayer!");
                 return;
             }
-            Hooks.OnLocalPlayerLoaded += new Action<VRCPlayer>(player =>
+            OnLocalPlayerLoaded += new Action<VRCPlayer>(player =>
             {
                 method.Invoke(null, new object[] { player });
             });
         }
+
+        public void AddHook_LeftRoom(string methodName)
+        {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            MethodInfo method = callingClass.GetMethod(methodName);
+            if (method == null)
+            {
+                Logger.Error("Failed to Hook LeftRoom! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook LeftRoom! | Error Message: method is not static!");
+                return;
+            }
+            var methodParams = method.GetParameters();
+            if (methodParams.Length != 0)
+            {
+                Logger.Error("Failed to Hook LeftRoom! | Error Message: too many parameters!");
+                return;
+            }
+            OnLeftRoom += new Action(() =>
+            {
+                method.Invoke(null, null);
+            });
+        }
+
         #endregion
 
         #region Patch Methods
