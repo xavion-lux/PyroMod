@@ -67,6 +67,12 @@ namespace PyroMod
             }
         }
 
+        public override void OnSceneWasLoaded(int buildIndex, string sceneName)
+        {
+            if (buildIndex = -1)
+                MelonCoroutines.Start(WaitForPlayer());
+        }
+
         private IEnumerator WaitForQM()
         {
             while (UnityEngine.Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>()?.transform.Find("Container/Window/Page_Buttons_QM/HorizontalLayoutGroup/Page_Settings").gameObject == null) yield return null;
