@@ -73,7 +73,7 @@ namespace Example_Module
             }, "Toggle Button Example");
 
             // Slider
-            module.CreateSlider(subMenu, 15, 25, "Slider lol", 0, 1, 0.35f, delegate (float newValue)
+            module.CreateSlider(subMenu, 15, 25, "Slider lol", -300, -250, 0.35f, delegate (float newValue)
             {
                 module.Logger.Log($"Slider Value: {newValue}");
             });

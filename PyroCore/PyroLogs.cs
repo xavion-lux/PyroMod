@@ -109,14 +109,14 @@ namespace PyroMod
             public string ModuleName { get; }
             public ConsoleColor ModuleColor { get; } = ConsoleColor.DarkGray;
 
-            public void Log(string msg) => ProcessLog(LogLevel.Log, msg, ConsoleColor.Gray);
-            public void Log(string msg, ConsoleColor col) => ProcessLog(LogLevel.Log, msg, col);
-            public void Warning(string msg) => ProcessLog(LogLevel.Warning, msg, ConsoleColor.Gray);
-            public void Warning(string msg, ConsoleColor col) => ProcessLog(LogLevel.Warning, msg, col);
-            public void Error(string msg) => ProcessLog(LogLevel.Error, msg, ConsoleColor.Gray);
-            public void Error(string msg, ConsoleColor col) => ProcessLog(LogLevel.Error, msg, col);
-            public void Success(string msg) => ProcessLog(LogLevel.Success, msg, ConsoleColor.Green);
-            public void Failure(string msg) => ProcessLog(LogLevel.Failure, msg, ConsoleColor.Red);
+            public void Log(string msg) => ProcessLog(LogLevel.Log, msg, ConsoleColor.Gray, this);
+            public void Log(string msg, ConsoleColor col) => ProcessLog(LogLevel.Log, msg, col, this);
+            public void Warning(string msg) => ProcessLog(LogLevel.Warning, msg, ConsoleColor.Gray, this);
+            public void Warning(string msg, ConsoleColor col) => ProcessLog(LogLevel.Warning, msg, col, this);
+            public void Error(string msg) => ProcessLog(LogLevel.Error, msg, ConsoleColor.Gray, this);
+            public void Error(string msg, ConsoleColor col) => ProcessLog(LogLevel.Error, msg, col, this);
+            public void Success(string msg) => ProcessLog(LogLevel.Success, msg, ConsoleColor.Green, this);
+            public void Failure(string msg) => ProcessLog(LogLevel.Failure, msg, ConsoleColor.Red, this);
         }
 
         internal enum LogLevel

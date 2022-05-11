@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static PyroMod.Main;
@@ -15,6 +16,7 @@ namespace PyroMod.API.QuickMenu
         private readonly float BtnXLocation;
         private readonly float BtnYLocation;
         private readonly string BtnToolTip;
+        private TextMeshProUGUI btnTextComp;
         private Action BtnOnAction;
         private Action BtnOffAction;
         private readonly bool DefaultState;
@@ -56,10 +58,9 @@ namespace PyroMod.API.QuickMenu
                 PlacementTransform = Menu.GetMenuObject().transform;
             button = UnityEngine.Object.Instantiate(APIUtils.MainButton(), PlacementTransform, true);
             button.name = $"{Module.ModuleName}-ToggleButton-{APIUtils.RandomNumbers()}";
-            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().fontSize = 30;
             button.GetComponent<RectTransform>().sizeDelta = new Vector2(200, 176);
             button.GetComponent<RectTransform>().anchoredPosition = new Vector2(-68, 796);
-            button.GetComponentInChildren<TMPro.TextMeshProUGUI>().rectTransform.anchoredPosition += new Vector2(0, 50);
+            btnTextComp = button.GetComponentInChildren<TextMeshProUGUI>(true);
             btnComp = button.GetComponentInChildren<Button>(true);
             btnComp.onClick = new Button.ButtonClickedEvent();
             btnComp.onClick.AddListener(new Action(HandleClick));
