@@ -69,8 +69,7 @@ namespace PyroMod
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
         {
-            if (buildIndex = -1)
-                MelonCoroutines.Start(WaitForPlayer());
+            if (buildIndex == -1) MelonCoroutines.Start(WaitForPlayer());
         }
 
         private IEnumerator WaitForQM()
