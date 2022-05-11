@@ -55,7 +55,7 @@ namespace PyroMod
                         if ((string)item["Version"] == PyroBuildInfo.Version)
                             PyroLogs.Log("PyroMod is up to date!");
                         else
-                            PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["tag_name"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
+                            PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["Version"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
                     }
                 }
             }
