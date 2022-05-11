@@ -33,6 +33,10 @@ There is an example project attached to the repo
 | CreateSlider | Creates a slider inside your desired menu / category | QMSlider |
 | AddHook_PlayerJoined | Calls your provided method whenever a player joins the room | N/A |
 | AddHook_PlayerLeft | Calls your provided method whenever a player leaves the room | N/A |
+| AddHook_RPCReceived | Calls your provided method whenever an rpc is sent in the room | N/A |
+| AddHook_QMInitialized | Calls your provided method when the VRChat QuickMenu is Initialized | N/A |
+| AddHook_LocalPlayerLoaded | Calls your provided method when the local player (the person using pyro) loads into a room | N/A |
+| AddHook_LeftRoom | Calls your provided method when the local player (the person using pyro) leaves the room | N/A |
 
 ## Planned Features
 - ~~Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc~~ *[Completed]*
