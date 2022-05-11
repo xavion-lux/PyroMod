@@ -42,6 +42,7 @@ namespace PyroMod
         internal static event Action<VRC.Player> OnPlayerJoined;
         internal static event Action<VRC.Player> OnPlayerLeft;
         internal static event Action<VRC.Player, VrcEvent, VrcBroadcastType> OnRPCReceived;
+        internal static event Action OnQMInitialized;
 
         internal static void Initialize()
         {
@@ -69,6 +70,11 @@ namespace PyroMod
         private static void RPCReceived(ref VRC.Player __0, ref VrcEvent __1, ref VrcBroadcastType __2)
         {
             OnRPCReceived?.Invoke(__0, __1, __2);
+        }
+
+        internal static void OnQuickMenuInit()
+        {
+            OnQMInitialized.Invoke();
         }
     }
 }

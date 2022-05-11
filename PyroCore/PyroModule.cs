@@ -124,14 +124,14 @@ namespace PyroMod
 
         public QMToggleButton CreateToggle(QMCategory category, string btnText, Action btnOnAction, Action btnOffAction, string btnToolTip, bool defaultState = false)
         {
-            var tmp = new QMToggleButton(category, btnText, btnOnAction, btnOffAction, btnToolTip);
+            var tmp = new QMToggleButton(category, btnText, btnOnAction, btnOffAction, btnToolTip, defaultState);
             if (Main._qmIsInitialized) tmp.Initialize();
             return tmp;
         }
 
         public QMToggleButton CreateToggle(QMNestedMenu category, float posX, float posY, string btnText, Action btnOnAction, Action btnOffAction, string btnToolTip, bool defaultState = false)
         {
-            var tmp = new QMToggleButton(category, posX, posY, btnText, btnOnAction, btnOffAction, btnToolTip);
+            var tmp = new QMToggleButton(category, posX, posY, btnText, btnOnAction, btnOffAction, btnToolTip, defaultState);
             if (Main._qmIsInitialized) tmp.Initialize();
             return tmp;
         }
@@ -160,7 +160,12 @@ namespace PyroMod
             MethodInfo method = callingClass.GetMethod(methodName);
             if (method == null)
             {
-                Logger.Error("Failed to Hook PlayerJoined! | Error Message: method is null!");
+                Logger.Error("Failed to Hook PlayerJoined! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -189,7 +194,12 @@ namespace PyroMod
             MethodInfo method = callingClass.GetMethod(methodName);
             if (method == null)
             {
-                Logger.Error("Failed to Hook PlayerLeft! | Error Message: method is null!");
+                Logger.Error("Failed to Hook PlayerLeft! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -218,7 +228,12 @@ namespace PyroMod
             MethodInfo method = callingClass.GetMethod(methodName);
             if (method == null)
             {
-                Logger.Error("Failed to Hook RPCReceived! | Error Message: method is null!");
+                Logger.Error("Failed to Hook RPCReceived! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -248,6 +263,32 @@ namespace PyroMod
             Hooks.OnRPCReceived += new Action<Player, VRC_EventHandler.VrcEvent, VRC_EventHandler.VrcBroadcastType>((player, eventInfo, broadcastType) =>
             {
                 method.Invoke(null, new object[] { player, eventInfo, broadcastType });
+            });
+        }
+
+        public void AddHook_QMInitialized(string methodName)
+        {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            MethodInfo method = callingClass.GetMethod(methodName);
+            if (method == null)
+            {
+                Logger.Error("Failed to Hook QMInitialized! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
+                return;
+            }
+            var methodParams = method.GetParameters();
+            if (methodParams.Length != 0)
+            {
+                Logger.Error("Failed to Hook QMInitialized! | Error Message: too many parameters!");
+                return;
+            }
+            Hooks.OnQMInitialized += new Action(() =>
+            {
+                method.Invoke(null, null);
             });
         }
 

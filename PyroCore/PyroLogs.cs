@@ -56,15 +56,15 @@ namespace PyroMod
             Console.Write("]");
             if (instance != null)
             {
-                fullLog += $" [{instance.ModuleName}] ";
+                fullLog += $" [{instance.ModuleName}]";
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("[");
+                Console.Write(" [");
                 Console.ForegroundColor = instance.ModuleColor;
                 Console.Write(instance.ModuleName);
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("] ");
+                Console.Write("]");
             }
-            fullLog += $"[{lvl}] ";
+            fullLog += $" [{lvl}] ";
             Console.Write(" [");
             Console.ForegroundColor = LogLevelToColor(lvl);
             Console.Write(lvl);

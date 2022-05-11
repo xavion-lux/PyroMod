@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using UnityEngine;
 
 [assembly: MelonInfo(typeof(PyroMod.Main), PyroBuildInfo.Name, PyroBuildInfo.Version, PyroBuildInfo.Author, PyroBuildInfo.RepoUrl)]
 [assembly: MelonGame(PyroBuildInfo.GameAndDeveloper, PyroBuildInfo.GameAndDeveloper)]
@@ -66,6 +67,7 @@ namespace PyroMod
         {
             while (UnityEngine.Object.FindObjectOfType<VRC.UI.Elements.QuickMenu>()?.transform.Find("Container/Window/Page_Buttons_QM/HorizontalLayoutGroup/Page_Settings").gameObject == null) yield return null;
             QuickMenuInitialized();
+            Hooks.OnQuickMenuInit();
             yield break;
         }
 

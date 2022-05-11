@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static PyroMod.Main;
 
 namespace PyroMod.API.QuickMenu
 {
@@ -109,6 +109,8 @@ namespace PyroMod.API.QuickMenu
 
         public void SetToggleState(bool newState, bool shouldInvoke = false)
         {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod();
+            Console.WriteLine($"Calling Class: {callingClass.DeclaringType}.{callingClass.Name}");
             try
             {
                 var newIcon = newState ? APIUtils.GetOnIconSprite() : APIUtils.GetOffIconSprite();
@@ -128,7 +130,7 @@ namespace PyroMod.API.QuickMenu
                     }
                 }
             }
-            catch { }
+            catch (Exception ex) { Console.WriteLine("Toggle Error: " + ex.Message); }
         }
 
         public void ClickMe()
