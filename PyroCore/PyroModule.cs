@@ -1,9 +1,11 @@
-﻿using PyroMod.API.QuickMenu;
+﻿using HarmonyLib;
+using PyroMod.API.QuickMenu;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using VRC;
 using VRC.SDKBase;
+using static PyroMod.Hooks;
 
 namespace PyroMod
 {
@@ -13,6 +15,8 @@ namespace PyroMod
         internal string ModuleVersion { get; set; }
         internal string ModuleAuthor { get; set; }
         internal string ModuleDownloadURL { get; set; }
+        internal HarmonyLib.Harmony HarmonyInstance { get; set; }
+        internal List<Hooks.Patch> Patches { get; set; }
         internal QMCategory Category { get; set; }
         internal List<QMNestedMenu> ModuleNestedMenus { get; set; } = new List<QMNestedMenu>();
         internal List<QMSingleButton> ModuleSingleButtons { get; set; } = new List<QMSingleButton>();
@@ -77,6 +81,14 @@ namespace PyroMod
             catch (Exception ex)
             {
                 PyroLogs.Error($"Error Creating Module [{ModuleName}] Sliders! | Error Message: " + ex.Message);
+            }
+        }
+
+        internal void InitializePatches()
+        {
+            for (int i = 0; i < Patches.Count; i++)
+            {
+                Patches[i].ProcessPatch();
             }
         }
 
@@ -199,7 +211,7 @@ namespace PyroMod
             }
             if (!method.IsStatic)
             {
-                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
+                Logger.Error("Failed to Hook Player Left! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -233,7 +245,7 @@ namespace PyroMod
             }
             if (!method.IsStatic)
             {
-                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
+                Logger.Error("Failed to Hook RPCReceived! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -277,7 +289,7 @@ namespace PyroMod
             }
             if (!method.IsStatic)
             {
-                Logger.Error("Failed to Hook Player Joined! | Error Message: method is not static!");
+                Logger.Error("Failed to Hook QMInitialized! | Error Message: method is not static!");
                 return;
             }
             var methodParams = method.GetParameters();
@@ -290,6 +302,77 @@ namespace PyroMod
             {
                 method.Invoke(null, null);
             });
+        }
+
+        public void AddHook_LocalPlayerLoaded(string methodName)
+        {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            MethodInfo method = callingClass.GetMethod(methodName);
+            if (method == null)
+            {
+                Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: method is private!");
+                return;
+            }
+            if (!method.IsStatic)
+            {
+                Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: method is not static!");
+                return;
+            }
+            var methodParams = method.GetParameters();
+            if (methodParams.Length != 1)
+            {
+                if (methodParams.Length < 1)
+                    Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: too many parameters!");
+                else
+                    Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: method missing parameters!");
+                return;
+            }
+            if (methodParams[0].ParameterType != typeof(VRCPlayer))
+            {
+                Logger.Error("Failed to Hook LocalPlayerLoaded! | Error Message: first parameter is not vrcplayer!");
+                return;
+            }
+            Hooks.OnLocalPlayerLoaded += new Action<VRCPlayer>(player =>
+            {
+                method.Invoke(null, new object[] { player });
+            });
+        }
+        #endregion
+
+        #region Patch Methods
+
+        public void RegisterPrefixPatch(MethodInfo methodToPatch, string methodName)
+        {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            MethodInfo method = callingClass.GetMethod(methodName);
+            if (!method.IsStatic)
+            {
+                Logger.Error($"Failed to Register Patch ({methodName})! | Error Message: method is not static!");
+                return;
+            }
+            if (method.IsPublic)
+            {
+                Logger.Error($"Failed to Register Patch ({methodName})! | Error Message: method is public!");
+                return;
+            }
+            new Hooks.Patch(this, methodToPatch, new HarmonyMethod(method.DeclaringType.GetMethod(methodName, BindingFlags.Static | BindingFlags.NonPublic)), null);
+        }
+
+        public void RegisterPostfixPatch(MethodInfo methodToPatch, string methodName)
+        {
+            var callingClass = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            MethodInfo method = callingClass.GetMethod(methodName);
+            if (!method.IsStatic)
+            {
+                Logger.Error($"Failed to Register Patch ({methodName})! | Error Message: method is not static!");
+                return;
+            }
+            if (method.IsPublic)
+            {
+                Logger.Error($"Failed to Register Patch ({methodName})! | Error Message: method is public!");
+                return;
+            }
+            new Hooks.Patch(this, methodToPatch, new HarmonyMethod(method.DeclaringType.GetMethod(methodName, BindingFlags.Static | BindingFlags.NonPublic)), null);
         }
 
         #endregion

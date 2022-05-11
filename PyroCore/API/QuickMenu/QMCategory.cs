@@ -16,11 +16,13 @@ namespace PyroMod.API.QuickMenu
         private QMFoldout qmFoldout;
         private string LabelTxt;
         private bool CurrentState;
+        private readonly bool DefaultState;
 
-        public QMCategory(PyroModule module, string labelTxt)
+        public QMCategory(PyroModule module, string labelTxt, bool defaultState = true)
         {
             Module = module;
             LabelTxt = labelTxt;
+            DefaultState = defaultState;
         }
 
         internal void Initialize()
@@ -41,7 +43,7 @@ namespace PyroMod.API.QuickMenu
                 CurrentState = val;
             });
 
-            HeaderObject.transform.Find("Background_Button").GetComponent<Toggle>().isOn = false;
+            HeaderObject.transform.Find("Background_Button").GetComponent<Toggle>().isOn = DefaultState;
             BodyObject.transform.DestroyChildren();
             ChildTransform = BodyObject.transform;
         }

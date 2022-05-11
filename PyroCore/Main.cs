@@ -61,6 +61,10 @@ namespace PyroMod
             }
             MelonCoroutines.Start(WaitForQM());
             Hooks.Initialize();
+            for (int i = 0; i < PyroModules.Count; i++)
+            {
+                PyroModules[i].InitializePatches();
+            }
         }
 
         private IEnumerator WaitForQM()
@@ -80,7 +84,14 @@ namespace PyroMod
                 PyroModules[i].InitializeModuleUI();
             }
             _qmIsInitialized = true;
-        } 
+        }
+
+        private IEnumerator WaitForPlayer()
+        {
+            while (VRCPlayer.field_Internal_Static_VRCPlayer_0 == null) yield return null;
+            Hooks.LocalPlayerLoaded(VRCPlayer.field_Internal_Static_VRCPlayer_0);
+            yield break;
+        }
 
         public static PyroModule RegisterModule(string moduleName, string moduleVersion, string moduleAuthor, ConsoleColor? moduleColor = ConsoleColor.DarkGray, string moduleDownloadUrl = null)
         {
@@ -98,6 +109,7 @@ namespace PyroMod
                 ModuleDownloadURL = moduleDownloadUrl,
                 ModuleVersion = moduleVersion,
                 Logger = new PyroLogs.Instance(moduleName, (ConsoleColor)moduleColor),
+                HarmonyInstance = new HarmonyLib.Harmony("PyroPatching-" + moduleName),
             };
             PyroModules.Add(tmp);
             PyroLogs.Log($"Loaded Module {moduleName} v{moduleVersion} by {moduleAuthor}{(!string.IsNullOrEmpty(moduleDownloadUrl) ? $" (Download Link: {moduleDownloadUrl})" : string.Empty)}", ConsoleColor.Green);
