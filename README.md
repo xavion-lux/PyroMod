@@ -36,7 +36,7 @@ There is an example project attached to the repo
 
 ## Planned Features
 - ~~Hooks for OnPlayerJoined, OnPlayerLeft, OnRPCReceived, etc~~ *[Completed]*
-- Easier Harmony Patching
+- ~~Easier Harmony Patching~~
 - Wings Button API
 - Added Icon to Tab Button
 ---
