@@ -91,7 +91,7 @@ namespace PyroMod.API.QuickMenu
 
         public void OpenMe()
         {
-            APIUtils.GetQuickMenuInstance().prop_MenuStateController_0.Method_Public_Void_String_UIContext_Boolean_0(MenuPage.field_Public_String_0);
+            APIUtils.GetQuickMenuInstance().prop_MenuStateController_0.Method_Public_Void_String_UIContext_Boolean_TransitionType_0(MenuPage.field_Public_String_0);
         }
 
         public void CloseMe()
