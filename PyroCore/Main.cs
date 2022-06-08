@@ -19,7 +19,7 @@ namespace PyroMod
     public class PyroBuildInfo
     {
         public const string Name = "PyroMod";
-        public const string Version = "1.0.3";
+        public const string Version = "1.0.4";
         public const string Author = "WTFBlaze";
         public const string RepoUrl = "https://github.com/WTFBlaze/PyroMod";
         public const string GameAndDeveloper = "VRChat";
