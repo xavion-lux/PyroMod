@@ -19,7 +19,7 @@ namespace PyroMod
     public class PyroBuildInfo
     {
         public const string Name = "PyroMod";
-        public const string Version = "1.0.3";
+        public const string Version = "1.0.4";
         public const string Author = "WTFBlaze";
         public const string RepoUrl = "https://github.com/WTFBlaze/PyroMod";
         public const string GameAndDeveloper = "VRChat";
@@ -48,16 +48,20 @@ namespace PyroMod
                 var data = webClient.DownloadString("https://cdn.wtfblaze.com/mods/Mods.json");
                 var result = JsonConvert.DeserializeObject<JToken>(data);
 
-                foreach (var item in result)
+                try
                 {
-                    if ((string)item["Name"] == "PyroMod")
+                    foreach (var item in result)
                     {
-                        if ((string)item["Version"] == PyroBuildInfo.Version)
-                            PyroLogs.Log("PyroMod is up to date!");
-                        else
-                            PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["Version"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
+                        if ((string)item["Name"] == "PyroMod")
+                        {
+                            if ((string)item["Version"] == PyroBuildInfo.Version)
+                                PyroLogs.Log("PyroMod is up to date!");
+                            else
+                                PyroLogs.Warning($"Your are running an outdated version of PyroMod! Latest Version: {(string)result["Version"]} | Your Version: {PyroBuildInfo.Version}. You can download the latest version from the official repo. https://github.com/WTFBlaze/PyroMod/releases");
+                        }
                     }
                 }
+                catch (Exception ex) { PyroLogs.Error("There was an issue trying to check for PyroMod updates! | Error Message: " + ex.Message); }
             }
             MelonCoroutines.Start(WaitForQM());
             Hooks.Initialize();
