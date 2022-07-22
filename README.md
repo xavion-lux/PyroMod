@@ -2,8 +2,10 @@
 This mod makes it easier to create VRChat mods without having to stress about having all the appropriate materials. This mod is meant to be super user friendly and help make it easier for new mod developers get started making their own mods!
 
 # Read Me
-If you need assistance getting started with PyroMod feel free to join my discord to receive support from either me or others in the community!
-https://discord.gg/BlazesClient
+~~If you need assistance getting started with PyroMod feel free to join my discord to receive support from either me or others in the community!
+https://discord.gg/BlazesClient~~
+
+**__This mod was originally made by [WTFBlaze](https://github.com/WTFBlaze) but has since been transferred over to be continued and maintained by xavion-lux.__**
 
 If you find a bug or want to suggest a feature to be added to PyroMod you can open an issue and let us know OR fork the repo and make those changes yourself and make a pull request!
 
